@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (equation.length() > 0) {
                     isEqualActive = true;
+                    System.out.println(equation);
                     performLogic();
                 }
             }
@@ -194,8 +195,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void buttonLogic(char buttonText) {
         if (isEqualActive) {
-            initClear();
-            equation = equation + value1;
+            equation = String.valueOf(value1);
+            value1 = Double.parseDouble(equation);
+            index = equation.length() - 1;
             textInput.setText(equation);
             isEqualActive = false;
         }
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkForPreviousSymbols() {
 
-        if(equation.length() == 0) {
+        if (equation.length() == 0) {
             return true;
         }
 
@@ -228,9 +230,11 @@ public class MainActivity extends AppCompatActivity {
         value2 = 0;
         index = 0;
         operation = ' ';
+        isEqualActive = false;
     }
 
     private void performLogic() {
+
 
         try {
             for (int i = 0; i < equation.length(); i++) {
@@ -238,13 +242,12 @@ public class MainActivity extends AppCompatActivity {
                 if (i == equation.length() - 1) {
                     subEq = equation.substring(index, (i + 1));
                     value2 = Double.parseDouble(subEq);
-
                     value1 = goForCalculation(value1, value2, operation);
                 }
 
                 if (equation.charAt(i) == '+' || equation.charAt(i) == '-' || equation.charAt(i) == 'x' || equation.charAt(i) == '/'
                         || equation.charAt(i) == '%') {
-                    subEq = equation.substring(index, (i));
+                    subEq = equation.substring(index, i);
                     index = (i + 1);
 
                     if (value1 == 0) {
@@ -262,8 +265,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            textInput.setText("");
-            textInput.setHint("Error");
+            e.printStackTrace();
         }
     }
 
